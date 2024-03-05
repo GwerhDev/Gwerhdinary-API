@@ -1,19 +1,18 @@
 const router = require('express').Router();
-const Image = require('../models/Image');
+const imageSchema = require('../models/Image');
 
 router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const image = await Image.findById(id);
+    const image = await imageSchema.findById(id);
 
     if (!image) {
       return res.status(404).json({ message: 'not_found' });
     }
-
-    res.setHeader('Content-Type', 'image/jpeg');
     
     const response = Buffer.from(image.image, 'base64');
     
+    res.setHeader('Content-Type', 'image/jpeg');
     return res.send(response);
   } catch (error) {
     return res.status(500).json({ message: error.message });
