@@ -28,6 +28,9 @@ server.use((req, res, next) => {
     next();
   }
 });
+
+server.use(express.static("public"));
+
 server.use(session({
   secret: privateSecret,
   resave: false,

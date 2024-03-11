@@ -21,6 +21,7 @@ router.get('/:id', async (req, res) => {
 
     res.setHeader('Content-Type', 'image/jpeg');
     imageStream.pipe(res);
+
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

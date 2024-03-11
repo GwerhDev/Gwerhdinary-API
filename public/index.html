@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gwerhdinary</title>
+  <link rel="stylesheet" href="./style.css">
+  <script src="./script.js"></script>
+</head>
+<body>
+  <span class="title">
+    <img src="./assets/clan-shield-icon.svg" alt="">
+    <h1>Gwerhdinary</h1>
+  </span>
+  <div class="image-container" id="image-container">
+      <img id="imageDisplay" src="./assets/logo.png" alt="Imagen" height="100%">
+  </div>
+  <span id="imageForm">
+    <div class="inner-container">
+      <label for="id">id:</label>
+      <div>
+        <input type="text" oninput="handleInput()" id="imageId" placeholder="Ingresa una id válida">
+        <button type="submit" id="searchButton" onclick="handleClick()"><img src="./assets/search-icon.svg" height="13px" alt=""></button>
+      </div>
+    </div>
+  </span>
+  <i><span class="info-icon">i</span> Plataforma de almacenamiento de Gwerh</i>
+</body>
+</html>
