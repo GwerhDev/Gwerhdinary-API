@@ -1,6 +1,7 @@
 const express = require("express");
 const server = express();
 const routes = require("./routes");
+const path = require("path");
 
 const morgan = require("morgan");
 const session = require("express-session");
@@ -29,7 +30,11 @@ server.use((req, res, next) => {
   }
 });
 
-server.use(express.static("public"));
+server.use(express.static(path.join(__dirname)));
+
+server.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 server.use(session({
   secret: privateSecret,
