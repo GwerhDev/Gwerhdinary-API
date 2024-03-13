@@ -1,11 +1,12 @@
 import { Readable } from 'stream';
-import { imageModel } from '../models/Image';
-import { convertBase64ToBuffer } from '../utils/convertBase64ToBuffer';
+import { ImageModel } from '../../../models/Image';
+import { convertBase64ToBuffer } from '../../../utils/convertBase64ToBuffer';
+import { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function handler(req: any, res: any) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { id } = req.query;
-    const image = await imageModel.findById(id);
+    const image = await ImageModel.findById(id);
 
     if (!image || !image.image) {
       return res.status(404).json({ message: 'Imagen no encontrada' });
