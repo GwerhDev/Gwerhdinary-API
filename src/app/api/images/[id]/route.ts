@@ -1,11 +1,9 @@
-import connectDB from "@/integrations/mongodb";
-import { NextResponse } from "next/server";
-import { ImageModel } from "@/models/Image";
-import { convertBase64ToBuffer } from "@/utils/convertBase64ToBuffer";
+import { NextRequest, NextResponse } from "next/server";
+import { ImageModel } from "@/app/api/models/Image";
+import { convertBase64ToBuffer } from "@/app/api/utils/convertBase64ToBuffer";
 import { Readable } from "stream";
 
-export const GET = async (request: NextResponse, { params }: any) => {
-  await connectDB();
+export const GET = async (req: NextRequest, { params }: any) => {
   const { id } = params || null;
 
   try {
@@ -14,15 +12,9 @@ export const GET = async (request: NextResponse, { params }: any) => {
       return NextResponse.json({ data: 'Imagen no encontrada' }, { status: 400 });
     }
 
-    const imageBuffer = await convertBase64ToBuffer(image.image);
-
-    const imageStream = new Readable();
-    imageStream.push(imageBuffer);
-    imageStream.push(null);
-
     return NextResponse.json({ data: image.image }, { status: 200});
 
   } catch (error) {
-    return NextResponse.json({ data: null }, { status: 500 })
+    return NextResponse.json({ data: null }, { status: 500 });
   }
 }

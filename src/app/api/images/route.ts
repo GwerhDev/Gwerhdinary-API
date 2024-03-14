@@ -1,9 +1,8 @@
-import connectDB from "@/integrations/mongodb";
+import connectDB from "@/app/api/integrations/mongodb";
 import { NextResponse } from "next/server";
-import { ImageModel } from "@/models/Image";
+import { ImageModel } from "@/app/api/models/Image";
 
 export const GET = async () => {
-  await connectDB();
   try {
     const response: any = await ImageModel.find();
     return NextResponse.json({ data: response }, { status: 200 });
@@ -13,7 +12,6 @@ export const GET = async () => {
 };
 
 export const POST = async () => {
-  await connectDB();
   try {
 
   } catch (error) {
