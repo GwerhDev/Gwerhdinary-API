@@ -7,7 +7,10 @@ router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
-    const trackID = new ObjectId(id) || null;
+    const trackID = new ObjectId(id);
+
+    res.set("content-type", "audio/mp3");
+    res.set("accept-ranges", "bytes");
 
     const bucket = new GridFSBucket(DB.getConnection().db, {
       bucketName: 'tracks'
@@ -15,20 +18,16 @@ router.get("/:id", async (req, res) => {
 
     const downloadStream = bucket.openDownloadStream(trackID);
 
-    const audioBuffer = [];
-
-    downloadStream.on('data', (chunk) => {
-      audioBuffer.push(chunk);
+    downloadStream.on('data', chunk => {
+      res.write(chunk);
     });
-
+  
+    downloadStream.on('error', () => {
+      res.sendStatus(404);
+    });
+  
     downloadStream.on('end', () => {
-      const audioStream = new Readable();
-      audioBuffer.forEach(chunk => audioStream.push(chunk));
-      audioStream.push(null);
-
-      res.set("content-type", "audio/mp3");
-
-      audioStream.pipe(res);
+      res.end();
     });
 
   } catch (error) {
