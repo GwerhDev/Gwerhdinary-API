@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { getFileUrlFromS3 } = require("../integrations/aws");
 const DB = require("../integrations/mongodb");
 const { ObjectId, GridFSBucket } = require('mongodb');
 
@@ -6,28 +7,9 @@ router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
-    const trackID = new ObjectId(id);
+    const response = await getFileUrlFromS3('audio.mp3', '/audio');
 
-    res.set("content-type", "audio/mp3");
-    res.set("accept-ranges", "bytes");
-
-    const bucket = new GridFSBucket(DB.getConnection().db, {
-      bucketName: 'tracks'
-    });
-
-    const downloadStream = bucket.openDownloadStream(trackID);
-
-    downloadStream.on('data', chunk => {
-      res.write(chunk);
-    });
-  
-    downloadStream.on('error', () => {
-      res.sendStatus(404);
-    });
-  
-    downloadStream.on('end', () => {
-      res.end();
-    });
+    return res.status(200).send(response);
 
   } catch (error) {
     console.error('Error handling request:', error);
