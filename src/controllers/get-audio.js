@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const DB = require("../integrations/mongodb");
 const { ObjectId, GridFSBucket } = require('mongodb');
-const { Readable } = require('stream');
 
 router.get("/:id", async (req, res) => {
   try {

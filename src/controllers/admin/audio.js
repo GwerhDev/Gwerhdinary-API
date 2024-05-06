@@ -11,7 +11,7 @@ router.post("/create", async (req, res) => {
       fileSize: 9000000, // 9mb maximum size
       files: 1, // maximum 1 file
     }
-  })
+  });
 
   upload.single('track')(req, res, (err) => {
     if (err) {
