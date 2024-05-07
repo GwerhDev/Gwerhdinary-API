@@ -7,7 +7,7 @@ router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
-    const response = await getFileUrlFromS3('audio.mp3', '/audio');
+    const response = getFileUrlFromS3('audio.mp3', '/audio');
 
     return res.status(200).send(response);
 
