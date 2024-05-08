@@ -19,16 +19,10 @@ server.use((req, res, next) => {
   console.log('method:', req.method);
   console.log('route:', req.url);
 
-  const allowedOrigins = [
-    'https://tv.laruina.cl', 
-    'https://hub.laruina.cl',
-    'https://play.laruina.cl',
-  ];
-
   const origin = req.headers.origin;
 
   if (allowedOrigins.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Origin', '*');
   }
   res.header('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Access-Control-Allow-Origin');

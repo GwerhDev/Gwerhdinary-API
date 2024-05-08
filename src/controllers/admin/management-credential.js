@@ -1,31 +1,54 @@
 const router = require("express").Router();
 const { environment } = require('../../config');
-const { createClientSecret } = require("../../integrations/jwt");
+const { createClientSecret, decodeToken } = require("../../integrations/jwt");
+const { production, role } = require("../../misc/consts");
+const userSchema = require("../../models/User");
 const credentialSchema = require("../../models/Credential");
+const { message } = require("../../messages");
 
-environment !== "production" &&
-  router.post("/create", async (req, res) => {
-    try {
-      const credential = await credentialSchema.create({});
+router.get("/", async (req, res) => {
+  try {
+    const userToken = req.headers.authorization;
+    const decodedToken = await decodeToken(userToken);
 
-      const payload = {
-        clientId: credential._id
-      };
+    const user = await userSchema.findOne({ _id: decodedToken.data._id }).populate('credentials');
+    if (!user) return res.status(404).send({ logged: false, message: message.user.notfound });
 
-      const clientSecret = createClientSecret(payload);
+    return res.status(200).send(user.credentials);
 
-      const response = {
-        clientId: payload.clientId,
-        clientSecret,
-      };
+  } catch (error) {
+    return res.status(500).send({ message: error.message });
+  }
+});
 
-      return res.status(200).json(response);
+router.post("/create", async (req, res) => {
+  try {
+    const userToken = req.headers.authorization;
+    const decodedToken = await decodeToken(userToken);
 
-    } catch (error) {
-      console.error(error);
-      return res.status(500).send({ message: "Internal Error" });
-    }
-  });
+    const user = await userSchema.findOne({ _id: decodedToken.data._id }).populate('credentials');
+    if (!user || user.role === role.freemium) return res.status(404).send({ logged: false, message: message.permission.denied });
+
+    const credential = await credentialSchema.create({ active: true });
+
+    const payload = {
+      clientId: credential._id
+    };
+
+    const clientSecret = createClientSecret(payload);
+
+    const response = {
+      clientId: payload.clientId,
+      clientSecret,
+    };
+
+    return res.status(200).json(response);
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({ message: "Internal Error" });
+  }
+});
 
 router.delete("/delete/:id", async (req, res) => {
   try {

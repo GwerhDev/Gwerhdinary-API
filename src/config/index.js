@@ -1,7 +1,9 @@
+const { production } = require("../misc/consts");
+
 module.exports = {
   port: process.env.PORT,
   environment: process.env.NODE_ENV,
-  apiUrl: process.env.NODE_ENV === "production" ? process.env.API_PRODUCTION : process.env.API_DEVELOPMENT,
+  apiUrl: process.env.NODE_ENV === production ? process.env.API_PRODUCTION : process.env.API_DEVELOPMENT,
 
   mongodbString: process.env.MONGODB_STRING,
   awsKey: process.env.AWS_KEY,
@@ -9,4 +11,6 @@ module.exports = {
   awsBucket: process.env.AWS_BUCKET,
 
   privateSecret: process.env.PRIVATE_SECRET,
+  
+  adminEmailList: process.env.ADMIN_EMAIL_LIST,
 }
