@@ -22,6 +22,15 @@ body {
   border-top-right-radius: 5px;
   display: flex;
   gap: .2rem;
+  flex-direction: column;
+}
+
+.logo {
+  height: 40px;
+}
+
+small {
+  color: white;
 }
 
 h1 {

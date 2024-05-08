@@ -11,7 +11,7 @@ const s3 = new AWS.S3();
 
 async function uploadFileToS3(file) {
   try {
-    const fileName = `${uuidv4()}_${file.originalname}`;
+    const fileName = `audio/${uuidv4()}_${file.originalname}`;
     const uploadParams = {
       Bucket: awsBucket,
       Key: fileName,
@@ -40,7 +40,27 @@ function getFileUrlFromS3(fileName, folder) {
   }
 };
 
+async function deleteFileFromS3ByUrl(fileUrl) {
+  try {
+    const urlParts = fileUrl.split('/');
+    const fileName = urlParts[urlParts.length - 1];
+    const filePath = urlParts.slice(3).join('/');
+
+    const deleteParams = {
+      Bucket: awsBucket,
+      Key: filePath + '/' + fileName
+    };
+    await s3.deleteObject(deleteParams).promise();
+
+    console.log(`Archivo ${fileName} eliminado de S3.`);
+  } catch (error) {
+    console.error('Error deleting file from S3:', error);
+    throw error;
+  }
+};
+
 module.exports = {
   uploadFileToS3,
-  getFileUrlFromS3
+  getFileUrlFromS3,
+  deleteFileFromS3ByUrl,
 };
