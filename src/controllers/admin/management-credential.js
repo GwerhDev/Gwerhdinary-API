@@ -1,7 +1,6 @@
 const router = require("express").Router();
-const { environment } = require('../../config');
 const { createClientSecret, decodeToken } = require("../../integrations/jwt");
-const { production, role } = require("../../misc/consts");
+const { role } = require("../../misc/consts");
 const userSchema = require("../../models/User");
 const credentialSchema = require("../../models/Credential");
 const { message } = require("../../messages");
@@ -26,7 +25,7 @@ router.post("/create", async (req, res) => {
     const userToken = req.headers.authorization;
     const decodedToken = await decodeToken(userToken);
 
-    const user = await userSchema.findOne({ _id: decodedToken.data._id }).populate('credentials');
+    const user = await userSchema.findOne({ _id: decodedToken.data._id });
     if (!user || user.role === role.freemium) return res.status(404).send({ logged: false, message: message.permission.denied });
 
     const credential = await credentialSchema.create({ active: true });
