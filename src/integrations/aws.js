@@ -11,7 +11,7 @@ const s3 = new AWS.S3();
 
 async function uploadFileToS3(file) {
   try {
-    const fileName = `audio/${uuidv4()}_${file.originalname}`;
+    const fileName = `${file.clientId}/audio/${file.originalname}_${uuidv4()}`;
     const uploadParams = {
       Bucket: awsBucket,
       Key: fileName,

@@ -8,7 +8,7 @@ const session = require("express-session");
 
 const passport = require("passport");
 const bodyParser = require("body-parser");
-const { privateSecret } = require("./config");
+const { privateSecret, redirectionClient } = require("./config");
 
 server.use(bodyParser.json({ limit: '100mb' }));
 server.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
@@ -33,7 +33,7 @@ server.use((req, res, next) => {
 server.use(express.static(path.join(__dirname)));
 
 server.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  return res.status(200).redirect(redirectionClient);
 });
 
 server.use(session({

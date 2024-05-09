@@ -25,7 +25,8 @@ router.post("/upload", async (req, res) => {
     const url = await uploadFileToS3({
       buffer: Buffer.from(file.buffer, 'base64'),
       mimetype: file.mimetype,
-      originalname: file.originalname
+      originalname: file.originalname,
+      clientId
     });
 
     return res.status(200).json({ url });
