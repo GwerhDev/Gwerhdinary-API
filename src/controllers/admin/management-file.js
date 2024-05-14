@@ -12,9 +12,9 @@ router.post("/create-url", async (req, res) => {
       clientId,
       clientSecret,
       mimetype,
-      mediatype,
-      originalname,
     } = req.body;
+
+    if (!mimetype) return res.status(400).json({ message: "Invalid file data format" });
 
     const decodedClientSecret = await decodeToken(clientSecret);
     const decodedClientId = decodedClientSecret.clientId;
@@ -24,15 +24,11 @@ router.post("/create-url", async (req, res) => {
     const validatedCredential = await credentialSchema.findById(clientId);
     if (!validatedCredential) return res.status(403).json({ message: message.permission.denied });
 
-    if (!mimetype || !originalname) {
-      return res.status(400).json({ message: "Invalid file data format" });
-    };
-
     if (validatedCredential.active) {
       const response = await getSignedUrl({
         clientId,
-        mediatype: mediatype,
-        originalname: originalname,
+        mimetype: mimetype,
+        ex: mimetype.split("/")[1],
       });
 
       return res.status(200).send(response);

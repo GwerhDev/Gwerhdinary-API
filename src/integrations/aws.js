@@ -12,15 +12,15 @@ AWS.config.update({
 const s3 = new AWS.S3();
 
 async function getSignedUrl(data) {
-  const fileName = `${data.clientId}/${data.mediatype}/${data.originalname}`;
+  const filePath = `${data.clientId}/${data.mimetype}/${uuidv4()}.${data.ex}`;
   const params = {
     Bucket: awsBucket,
-    Key: fileName,
+    Key: filePath,
     Expires: 3600
   };
 
   const url = s3.getSignedUrl('putObject', params); 
-  const path = `https://streamby.s3.sa-east-1.amazonaws.com/${fileName}`
+  const path = `https://${awsBucket}.s3.sa-east-1.amazonaws.com/${filePath}`
   return { url, path };
 };
 
@@ -62,5 +62,6 @@ async function deleteFileFromS3ByUrl(fileUrl) {
 
 module.exports = {
   getSignedUrl,
+  uploadFileToS3,
   deleteFileFromS3ByUrl,
 };
