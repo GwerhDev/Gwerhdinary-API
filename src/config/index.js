@@ -11,6 +11,10 @@ module.exports = {
   awsSecret: process.env.AWS_SECRET,
   awsBucket: process.env.AWS_BUCKET,
 
+  awsAccessKey: process.env.AWS_ACCESS_KEY,
+  awsSecretKey: process.env.AWS_SECRET_KEY,
+  awsRegion: process.env.AWS_REGION,
+
   privateSecret: process.env.PRIVATE_SECRET,
   
   adminEmailList: process.env.ADMIN_EMAIL_LIST,

@@ -13,7 +13,9 @@ router.get("/", async (req, res) => {
     const user = await userSchema.findOne({ _id: decodedToken.data._id }).populate('credentials');
     if (!user) return res.status(404).send({ logged: false, message: message.user.notfound });
 
-    return res.status(200).send(user.credentials);
+    const { credentials } = user;
+
+    return res.status(200).send(credentials)
 
   } catch (error) {
     return res.status(500).send({ message: error.message });

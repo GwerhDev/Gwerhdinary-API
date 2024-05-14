@@ -1,17 +1,32 @@
 const AWS = require('aws-sdk');
 const { v4: uuidv4 } = require('uuid');
-const { awsKey, awsSecret, awsBucket } = require('../config');
+const { awsBucket, awsAccessKey, awsSecretKey, awsRegion } = require('../config');
 
 AWS.config.update({
-  accessKeyId: awsKey,
-  secretAccessKey: awsSecret
+  accessKeyId: awsAccessKey,
+  secretAccessKey: awsSecretKey,
+  region: awsRegion,
+  signatureVersion: 'v4',
 });
 
 const s3 = new AWS.S3();
 
+async function getSignedUrl(data) {
+  const fileName = `${data.clientId}/${data.mediatype}/${data.originalname}`;
+  const params = {
+    Bucket: awsBucket,
+    Key: fileName,
+    Expires: 3600
+  };
+
+  const url = s3.getSignedUrl('putObject', params); 
+  const path = `https://streamby.s3.sa-east-1.amazonaws.com/${fileName}`
+  return { url, path };
+};
+
 async function uploadFileToS3(file) {
   try {
-    const fileName = `${file.clientId}/audio/${file.originalname}_${uuidv4()}`;
+    const fileName = `${file.clientId}/${file.mediatype}/${uuidv4()}_${file.originalname}`;
     const uploadParams = {
       Bucket: awsBucket,
       Key: fileName,
@@ -22,20 +37,6 @@ async function uploadFileToS3(file) {
     return result.Location;
   } catch (error) {
     console.error('Error uploading file to S3:', error);
-    throw error;
-  }
-};
-
-function getFileUrlFromS3(fileName, folder) {
-  try {
-    const fileUrl = s3.getSignedUrl('getObject', {
-      Bucket: awsBucket + folder,
-      Key: fileName,
-      Expires: 3600
-    });
-    return fileUrl;
-  } catch (error) {
-    console.error('Error getting file URL from S3:', error);
     throw error;
   }
 };
@@ -60,7 +61,6 @@ async function deleteFileFromS3ByUrl(fileUrl) {
 };
 
 module.exports = {
-  uploadFileToS3,
-  getFileUrlFromS3,
+  getSignedUrl,
   deleteFileFromS3ByUrl,
 };

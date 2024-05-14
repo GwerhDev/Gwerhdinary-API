@@ -1,9 +1,9 @@
 const router = require('express').Router();
 
+const file = require('./management-file');
 const credential = require('./management-credential');
-const audio = require('./management-audio');
 
+router.use("/f", file);
 router.use("/credential", credential);
-router.use("/a", audio);
 
 module.exports = router;
