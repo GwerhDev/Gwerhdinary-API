@@ -19,9 +19,9 @@ async function getSignedUrl(data) {
     Expires: 3600
   };
 
-  const url = s3.getSignedUrl('putObject', params); 
-  const path = `https://${awsBucket}.s3.sa-east-1.amazonaws.com/${filePath}`
-  return { url, path };
+  const presigned = s3.getSignedUrl('putObject', params); 
+  const url = `https://${awsBucket}.s3.sa-east-1.amazonaws.com/${filePath}`
+  return { presigned, url };
 };
 
 async function uploadFileToS3(file) {
