@@ -3,9 +3,9 @@ const { v4: uuidv4 } = require('uuid');
 const { awsBucket, awsAccessKey, awsSecretKey, awsRegion } = require('../config');
 
 AWS.config.update({
+  region: awsRegion,
   accessKeyId: awsAccessKey,
   secretAccessKey: awsSecretKey,
-  region: awsRegion,
   signatureVersion: 'v4',
 });
 
@@ -16,13 +16,15 @@ async function getSignedUrl(data) {
   const params = {
     Bucket: awsBucket,
     Key: filePath,
-    Expires: 3600
+    Expires: 3600,
+    ContentType: data.mimetype,
   };
 
   const presigned = s3.getSignedUrl('putObject', params); 
-  const url = `https://${awsBucket}.s3.sa-east-1.amazonaws.com/${filePath}`;
-  
-  return { presigned, url };
+  const url = `https://${awsBucket}.s3.${awsRegion}.amazonaws.com/${filePath}`;
+  const formattedResponse =  { presigned, url };
+
+  return formattedResponse;
 };
 
 async function uploadFileToS3(file) {
