@@ -4,7 +4,7 @@ const credentialSchema = require("../../models/Credential");
 const { message } = require("../../messages");
 const { getSignedUrl } = require("../../integrations/aws");
 
-router.post("/create-url", async (req, res) => {
+router.post("/create-signed-url", async (req, res) => {
   try {
     if (!req.body) return res.status(400).json({ message: "File not found in request body" });
 
