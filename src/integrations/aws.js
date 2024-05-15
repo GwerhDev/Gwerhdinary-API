@@ -27,36 +27,19 @@ async function getSignedUrl(data) {
   return formattedResponse;
 };
 
-async function uploadFileToS3(file) {
+async function deleteFileByUrl(fileUrl) {
   try {
-    const fileName = `${file.clientId}/${file.mediatype}/${uuidv4()}_${file.originalname}`;
-    const uploadParams = {
-      Bucket: awsBucket,
-      Key: fileName,
-      Body: file.buffer,
-      ContentType: file.mimetype
-    };
-    const result = await s3.upload(uploadParams).promise();
-    return result.Location;
-  } catch (error) {
-    console.error('Error uploading file to S3:', error);
-    throw error;
-  }
-};
-
-async function deleteFileFromS3ByUrl(fileUrl) {
-  try {
-    const urlParts = fileUrl.split('/');
-    const fileName = urlParts[urlParts.length - 1];
-    const filePath = urlParts.slice(3).join('/');
+    const url = new URL(fileUrl);
+    const key = url.pathname.substring(1);
 
     const deleteParams = {
       Bucket: awsBucket,
-      Key: filePath + '/' + fileName
+      Key: key
     };
+
     await s3.deleteObject(deleteParams).promise();
 
-    console.log(`Archivo ${fileName} eliminado de S3.`);
+    console.log(`Archivo ha sido eliminado de S3.`);
   } catch (error) {
     console.error('Error deleting file from S3:', error);
     throw error;
@@ -65,6 +48,5 @@ async function deleteFileFromS3ByUrl(fileUrl) {
 
 module.exports = {
   getSignedUrl,
-  uploadFileToS3,
-  deleteFileFromS3ByUrl,
+  deleteFileByUrl,
 };
