@@ -9,9 +9,9 @@ module.exports = {
   mongodbString: process.env.MONGODB_STRING,
 
   awsKey: process.env.AWS_KEY,
-  awsRegion: process.env.AWS_REGION,
   awsSecret: process.env.AWS_SECRET,
   awsBucket: process.env.AWS_BUCKET,
+  awsRegion: process.env.AWS_BUCKET_REGION,
   awsAccessKey: process.env.AWS_ACCESS_KEY,
   awsSecretKey: process.env.AWS_SECRET_KEY,
 

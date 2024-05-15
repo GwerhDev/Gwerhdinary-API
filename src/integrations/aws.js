@@ -20,7 +20,7 @@ async function getSignedUrl(data) {
     ContentType: data.mimetype,
   };
 
-  const presigned = s3.getSignedUrl('putObject', params); 
+  const presigned = s3.getSignedUrl('putObject', params);
   const url = `https://${awsBucket}.s3.${awsRegion}.amazonaws.com/${filePath}`;
   const formattedResponse =  { presigned, url };
 
