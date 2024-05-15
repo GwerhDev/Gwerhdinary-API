@@ -20,7 +20,8 @@ async function getSignedUrl(data) {
   };
 
   const presigned = s3.getSignedUrl('putObject', params); 
-  const url = `https://${awsBucket}.s3.sa-east-1.amazonaws.com/${filePath}`
+  const url = `https://${awsBucket}.s3.sa-east-1.amazonaws.com/${filePath}`;
+  
   return { presigned, url };
 };
 
