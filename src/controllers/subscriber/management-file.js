@@ -41,7 +41,7 @@ router.post("/create-signed-url", async (req, res) => {
   }
 });
 
-router.delete("/delete-by-url", async (req, res) => {
+router.post("/delete-by-url", async (req, res) => {
   try {
     if (!req.body) return res.status(400).json({ message: "File not found in request body" });
 
