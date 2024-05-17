@@ -1,5 +1,16 @@
 module.exports = {
   message: {
+    file: {
+      body: {
+        notfound: "File not found in request body"
+      },
+      url: {
+        notfound: "File url not found in request body"
+      },
+      format: {
+        invalid: "Invalid file data format"
+      }
+    },
     permission: {
       denied: "Permission denied"
     },
