@@ -36,7 +36,7 @@ router.post("/create", async (req, res) => {
       clientId: credential._id
     };
 
-    const clientSecret = createClientSecret(payload);
+    const clientSecret = await createClientSecret(payload);
 
     const response = {
       clientId: payload.clientId,
